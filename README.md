@@ -2,7 +2,7 @@
 A text-to-speech synthesizer based on C#.
 Made by SKLD/pythonomial (Both accounts are one person, I kind of made a mistake with the two accounts so)
 
-### Current version: 1.3
+### Current version: 1.4
 
 Press TAB to make indentations for paragraphs.
 Press RETURN to add new lines.
