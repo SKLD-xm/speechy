@@ -4,7 +4,10 @@ using System.Speech.Synthesis;
 using System.Windows;
 using System.Windows.Threading;
 using System.Diagnostics;
-using System.Windows.Navigation;
+using System.IO;
+using Microsoft.Win32;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace speechthing
 {
@@ -15,12 +18,17 @@ namespace speechthing
     {
         static SpeechSynthesizer spe = new SpeechSynthesizer();
 
-        static List<string> list = new List<string>();
-
-        static char Mode = '0';
+        static List<string> list = new List<string>(); // Of use in the future
 
         System.Speech.AudioFormat.SpeechAudioFormatInfo format;
 
+        private void LoadKeyboardShortcuts()
+        {
+            RoutedCommand Open = new RoutedCommand(); Open.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control)); CommandBindings.Add(new CommandBinding(Open, OpenFile_Click));
+            RoutedCommand Save = new RoutedCommand(); Save.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control)); CommandBindings.Add(new CommandBinding(Save, SaveFile_Click));
+            RoutedCommand Gender = new RoutedCommand(); Gender.InputGestures.Add(new KeyGesture(Key.G, ModifierKeys.Control)); CommandBindings.Add(new CommandBinding(Gender, changevoice));
+            RoutedCommand Mode = new RoutedCommand(); Mode.InputGestures.Add(new KeyGesture(Key.M, ModifierKeys.Control)); CommandBindings.Add(new CommandBinding(Mode, SSMLEnabled));
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +36,7 @@ namespace speechthing
             spe.StateChanged += Spe_StateChanged;
             spe.Volume = 100;
             name.MaxLength = 128;
+            LoadKeyboardShortcuts(); // For stuff //
             DispatcherTimer timer = new DispatcherTimer(new TimeSpan(0, 0, 1), DispatcherPriority.Normal, delegate {
                 time.Text = DateTime.Now.ToString("F");
             },
@@ -37,12 +46,12 @@ namespace speechthing
         private void Spe_StateChanged(object sender, StateChangedEventArgs e)
         {
             string aux = "";
-            switch (Mode)
+            switch (SSMLEnable.IsChecked)
             {
-                case '0':
+                case true:
                     aux = "SSML Disabled";
                     break;
-                case '1':
+                case false:
                     aux = "SSML Enabled";
                     break;
             }
@@ -51,7 +60,7 @@ namespace speechthing
 
         public int loadSettings()
         {
-            systemVoice.Text = $"Voice Name: {spe.Voice.Description}\nVoice Culture: {spe.Voice.Culture}\nVoice ID: {spe.Voice.Id}";
+            systemVoice.Text = $"Voice Name: {spe.Voice.Description}\nVoice Culture: {spe.Voice.Culture}\nVoice ID: {spe.Voice.Id}\nVoice Gender: {spe.Voice.Gender}\nMode: {SSMLEnable.Header.ToString().Substring(1)}";
             return 1;
         }
 
@@ -66,13 +75,13 @@ namespace speechthing
         public void speak(object sender, RoutedEventArgs e)
         {
             string pra = text.Text;
-            switch (Mode)
+            switch (SSMLEnable.Header)
             {
-                case '0':
-                    spe.SpeakAsync(pra);
-                    break;
-                case '1':
+                case "_SSML":
                     spe.SpeakSsmlAsync(pra);
+                    break;
+                case "_Raw Text":
+                    spe.SpeakAsync(pra);
                     break;
                 default:
                     spe.SpeakAsync(pra);
@@ -83,7 +92,6 @@ namespace speechthing
             pauseB.IsEnabled = true;
             unpauseB.IsEnabled = false;
             spe.SpeakCompleted += Spe_SpeakCompleted;
-            progress.Value = volumeSpeak.Value;
             Console.WriteLine("Speaking");
         }
 
@@ -93,13 +101,12 @@ namespace speechthing
             cancel.IsEnabled = false;
             pauseB.IsEnabled = false;
             unpauseB.IsEnabled = false;
-            progress.Value = 0;
             Console.WriteLine("Speak Completed");
         }
 
         private void helpGet(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Speechy\nBuild 0.2.8 (12/26/2022)\n \n\nCreated by pythonomial\nContact me on Discord!\nazure#9308\n\nChangelog (version 1.3)\nAdded ability to stop recording\nFixed readability issues for devices\nChanged TextBox font to Consolata for easier reading\nChanged TextBox to allow wordwrapping and newlines\nAdded SSML support\nAdded the ability to specify the export directory while recording\nChanged layout to be more simple\nBug fixes\nAdded the ability to change from Male to Female voice", "Speechy", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Speechy\nBuild 0.2.8 (12/28/2022)\n \n\nCreated by pythonomial\nContact me on Discord!\nazure#9308\n\nThis was a quick update that changed the layout a bit.", "Speechy", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void cancelSpeech(object sender, RoutedEventArgs e)
@@ -110,7 +117,6 @@ namespace speechthing
             unpauseB.IsEnabled = false;
             speech.IsEnabled = true;
             spe.Resume();
-            progress.Value = 0;
             Console.WriteLine("Cancel");
         }
 
@@ -132,17 +138,26 @@ namespace speechthing
 
         private void changevoice(object sender, RoutedEventArgs e)
         {
-            switch (Voicechanger.Content)
+            switch (spe.Voice.Gender)
             {
-                case "Male":
+                case VoiceGender.Male:
                     spe.SelectVoiceByHints(VoiceGender.Female);
-                    Voicechanger.Content = "Female";
+                    GenderChange.Header = "_Female Voice";
+                    GenderChange.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("/icon/female.png", UriKind.Relative))
+                    };
                     break;
-                case "Female":
+                case VoiceGender.Female:
                     spe.SelectVoiceByHints(VoiceGender.Male);
-                    Voicechanger.Content = "Male";
+                    GenderChange.Header = "_Male Voice";
+                    GenderChange.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("/icon/male.png", UriKind.Relative))
+                    };
                     break;
             }
+            systemVoice.Text = $"Voice Name: {spe.Voice.Description}\nVoice Culture: {spe.Voice.Culture}\nVoice ID: {spe.Voice.Id}\nVoice Gender: {spe.Voice.Gender}\nMode: {SSMLEnable.Header.ToString().Substring(1)}";
         }
 
         private void volumeChange(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -162,7 +177,6 @@ namespace speechthing
             unpauseB.IsEnabled = false;
             speech.IsEnabled = true;
             spe.Resume();
-            progress.Value = 0;
             Console.WriteLine("Cancel");
         }
 
@@ -208,23 +222,27 @@ namespace speechthing
             savefilegrid.Visibility = Visibility.Hidden;
         }
 
-        private void changeMode(object sender, RoutedEventArgs e)
+        private void SSMLEnabled(object sender, RoutedEventArgs e)
         {
-            string aux = "";
-            switch (Mode)
-            {
-                case '0':
-                    Mode = '1';
-                    mode.Content = "SSML (Advanced)";
-                    aux = "SSML Enabled";
+            switch (SSMLEnable.Header) {
+                case "_Raw Text":
+                    warning.Text = spe.State.ToString() + " – " + "SSML Enabled";
+                    SSMLEnable.Header = "_SSML";
+                    SSMLEnable.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("/icon/page_white_code.png", UriKind.Relative))
+                    };
                     break;
-                case '1':
-                    Mode = '0';
-                    mode.Content = "Non-SSML (Basic)";
-                    aux = "SSML Disabled";
+                case "_SSML":
+                    warning.Text = spe.State.ToString() + " – " + "SSML Disabled";
+                    SSMLEnable.Header = "_Raw Text";
+                    SSMLEnable.Icon = new System.Windows.Controls.Image
+                    {
+                        Source = new BitmapImage(new Uri("/icon/page_white_text.png", UriKind.Relative))
+                    };
                     break;
             }
-            warning.Text = spe.State.ToString() + " – " + aux;
+            systemVoice.Text = $"Voice Name: {spe.Voice.Description}\nVoice Culture: {spe.Voice.Culture}\nVoice ID: {spe.Voice.Id}\nVoice Gender: {spe.Voice.Gender}\nMode: {SSMLEnable.Header.ToString().Substring(1)}";
         }
 
         private void DefaultDevice(object sender, RoutedEventArgs e)
@@ -232,15 +250,29 @@ namespace speechthing
             spe.SetOutputToDefaultAudioDevice();
         }
 
-        private void text_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
-        }
-
         private void linkA(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog readFile = new OpenFileDialog();
+            readFile.Filter = "Raw text or SSML (*.txt, *.xml)|*.txt;*.xml";
+            if (readFile.ShowDialog() == true)
+            {
+                text.Text = File.ReadAllText(readFile.FileName);
+            }
+        }
+
+        private void SaveFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "Raw text or SSML (*.txt, *.xml)|*.txt;*.xml";
+            if (saveFile.ShowDialog() == true)
+            {
+                File.WriteAllText(saveFile.FileName, text.Text);
+            }
         }
     }
 

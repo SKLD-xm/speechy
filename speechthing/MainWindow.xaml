@@ -6,78 +6,75 @@
         xmlns:local="clr-namespace:speechthing"
         Icon="ipod_sound.png"
         mc:Ignorable="d"
-        Title="Speechy v1.3" Height="450" Width="800" ResizeMode="CanMinimize" Foreground="{x:Null}">
+        Title="Speechy v1.4" Height="404" Width="800" ResizeMode="CanMinimize" Foreground="{x:Null}">
     <Grid Background="#FFF1F1F1">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="425*"/>
+            <RowDefinition Height="19*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="335*"/>
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="text" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="369" Height="178" CaretBrush="Black" ToolTip="What the speech synthesizer will say" Grid.Row="1" AcceptsTab="True" FontWeight="Normal" AcceptsReturn="True" FontFamily="Consolas" Text="-- // SPEECHY // --&#xD;&#xA;Welcome to Speechy v1.3. This is the sample text, so you can replace it at anytime.&#xD;&#xA;&#xD;&#xA;Press TAB to make indentations for paragraphs.&#xD;&#xA;Press RETURN to add new lines.&#xD;&#xA;Press &quot;Speak&quot; to start the synthesizer based on the input text.&#xD;&#xA;Controls &quot;Stop&quot;, &quot;Resume&quot;, and &quot;Pause&quot; do exactly what they say.&#xD;&#xA;The &quot;Male&quot; button is a Female/Male voice toggle. &#xD;&#xA;Press Non-SSML (Basic) to turn on SSML (Advanced.)&#xD;&#xA;Press Record Speech to stream synthesizer output to a .wav file. &#xD;&#xA;Press Output to Default to stream synthesizer output to the default audio device (this stops recordings)&#xD;&#xA;You can change the voice speech rate and voice volume with the sliders below.&#xD;&#xA;&#xD;&#xA;-- // SSML GUIDE // --&#xD;&#xA;Speech Synthesis Markup Language (SSML) is an XML-based markup language that can be used to fine-tune the text-to-speech output attributes such as pitch, pronunciation, speaking rate, volume, and more (https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-synthesis-markup).&#xD;&#xA;&#xD;&#xA;To use SSML with this synthesizer, you must enable SSML mode by pressing the Non-SSML (Basic) button.&#xD;&#xA;&#xD;&#xA;SSML is a more complex approach to the regular &quot;input text, get basic output&quot;. However, it is very versatile and very powerful. &#xD;&#xA;&#xD;&#xA;With SSML you can:&#xD;&#xA;&#xD;&#xA;Define the input text structure that determines the structure, content, and other characteristics of the text-to-speech output. For example, you can use SSML to define a paragraph, a sentence, a break or a pause, or silence. You can wrap text with event tags such as bookmark or viseme that can be processed later by your application.&#xD;&#xA;Choose the voice, language, name, style, and role. You can use multiple voices in a single SSML document. Adjust the emphasis, speaking rate, pitch, and volume. You can also use SSML to insert pre-recorded audio, such as a sound effect or a musical note.&#xD;&#xA;Control pronunciation of the output audio. For example, you can use SSML with phonemes and a custom lexicon to improve pronunciation. You can also use SSML to define how a word or mathematical expression is pronounced (https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-synthesis-markup).&#xD;&#xA;&#xD;&#xA;SSML, in this case, is a free service.&#xD;&#xA;&#xD;&#xA;A basic template for SSML in Speechy would be:&#xD;&#xA;&lt;speak version=&quot;1.0&quot; xmlns=&quot;http://www.w3.org/2001/10/synthesis&quot; xml:lang=&quot;en-US&quot;&gt;&lt;/speak&gt;&#xD;&#xA;&#xD;&#xA;Anything inside of the &lt;speak&gt;&lt;/speak&gt; brackets will be executed and spoken. If you'd like to know more about what you can do with SSML, please see:&#xD;&#xA;&#xD;&#xA;https://www.w3.org/TR/2004/REC-speech-synthesis-20040907/&#xD;&#xA;&#xD;&#xA;Contact me at: azure#9308&#xD;&#xA;" TextChanged="text_TextChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Grid.Row="1"><Run Text="Input text for the synthesizer to speak"/><LineBreak/><Run/></TextBlock>
-        <Button x:Name="speech" Content="Speak" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Height="42" Width="184" ToolTip="Makes the synthesizer speak" FontSize="18" Click="speak" Grid.Row="1"/>
-        <Rectangle HorizontalAlignment="Center" Height="44" Margin="0,385,0,0" VerticalAlignment="Top" Width="830" Fill="#FFFBFBFB" Grid.Row="1" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0.197"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-1.497"/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        <TextBlock x:Name="warning" HorizontalAlignment="Left" Margin="5,0,0,-3" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="258" Foreground="Black" Height="21" Grid.Row="1" Grid.RowSpan="2"><Run Text="Ready – SSML Disabled"/><LineBreak/><Run/></TextBlock>
-        <TextBlock x:Name="systemVoice" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="Loading system voice..." Margin="0,2,4,0" Height="126" Width="369" TextAlignment="Right" Grid.RowSpan="2"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,264,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="Voice speech rate" Grid.Row="1"/>
-        <Slider x:Name="speechRate" HorizontalAlignment="Left" Margin="10,285,0,0" VerticalAlignment="Top" Width="268" SmallChange="1" TickPlacement="BottomRight" Foreground="#FFBFBFBF" Minimum="-10" ToolTip="How fast the voice speaks (-10 to 10)" ValueChanged="rateChange" AutoToolTipPlacement="BottomRight" Orientation="Horizontal" Grid.Row="1"/>
-        <TextBlock x:Name="rateText" HorizontalAlignment="Left" Margin="279,292,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="0" Width="121" Grid.Row="1"/>
-        <Button Content="?" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="18" Margin="0,0,4,1" Width="18" Click="helpGet" Grid.Row="1" ClickMode="Release" Grid.RowSpan="2">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
+        <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Grid.RowSpan="2" Background="White">
+            <Menu DockPanel.Dock="Top" Background="White">
+                <MenuItem Header="_File">
+                    <MenuItem Name="OpenFile"  Header="_Open" Click="OpenFile_Click" InputGestureText="Ctrl+O">
+                        <MenuItem.Icon>
+                            <Image Source="/icon/folder_explore.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Name="SaveFile"  Header="_Save" Click="SaveFile_Click" InputGestureText="Ctrl+S">
+                        <MenuItem.Icon>
+                            <Image Source="/icon/disk.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Mode">
+                    <MenuItem x:Name="SSMLEnable" Header="_Raw Text" Click="SSMLEnabled" InputGestureText="Ctrl+M">
+                        <MenuItem.Icon>
+                            <Image Source="/icon/page_white_text.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="GenderChange" Header="_Male Voice" Click="changevoice" InputGestureText="Ctrl+G">
+                        <MenuItem.Icon>
+                            <Image Name="GenderIcon" Source="/icon/male.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+            <TextBox AcceptsReturn="True" Height="3" MaxLength="0" Width="817" HorizontalAlignment="Center" />
+        </DockPanel>
+        <TextBox x:Name="text" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Width="369" Height="178" CaretBrush="Black" ToolTip="What the speech synthesizer will say" Grid.Row="3" AcceptsTab="True" FontWeight="Normal" AcceptsReturn="True" FontFamily="Consolas" Text="Welcome to Speechy 1.4&#xA;"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Grid.Row="2" Grid.RowSpan="2"><Run Text="Input text for the synthesizer to speak"/><LineBreak/><Run/></TextBlock>
+        <Button x:Name="speech" Content="Speak" HorizontalAlignment="Left" Margin="10,185,0,0" VerticalAlignment="Top" Height="42" Width="184" ToolTip="Makes the synthesizer speak" FontSize="18" Click="speak" Grid.Row="3"/>
+        <Rectangle HorizontalAlignment="Center" Height="49" Margin="0,295,0,0" VerticalAlignment="Top" Width="800" Fill="#FFFBFBFB" Grid.Row="3" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2"/>
+        <TextBlock x:Name="warning" HorizontalAlignment="Left" Margin="5,0,0,-3" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="258" Foreground="Black" Height="21" Grid.Row="3" Grid.RowSpan="2"><Run Text="Ready – SSML Disabled"/><LineBreak/><Run/></TextBlock>
+        <TextBlock x:Name="systemVoice" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="Loading system voice..." Margin="0,16,4,0" Height="126" Width="369" TextAlignment="Right" Grid.Row="1" Grid.RowSpan="3"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="Voice speech rate" Grid.Row="3"/>
+        <Slider x:Name="speechRate" HorizontalAlignment="Left" Margin="10,255,0,0" VerticalAlignment="Top" Width="268" SmallChange="1" TickPlacement="BottomRight" Foreground="#FFBFBFBF" Minimum="-10" ToolTip="How fast the voice speaks (-10 to 10)" ValueChanged="rateChange" AutoToolTipPlacement="BottomRight" Orientation="Horizontal" Grid.Row="3"/>
+        <TextBlock x:Name="rateText" HorizontalAlignment="Left" Margin="279,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="0" Width="121" Grid.Row="3"/>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Margin="0,0,4,1" Width="20" Click="helpGet" Grid.Row="3" ClickMode="Release" Grid.RowSpan="2" Background="{x:Null}" BorderBrush="{x:Null}">
+            <Button.Content>
+                <Image Source="/icon/information.png" Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+            </Button.Content>
         </Button>
-        <TextBlock HorizontalAlignment="Left" Margin="10,314,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="Voice volume" Grid.Row="1"/>
-        <Button x:Name="cancel" Content="Stop" HorizontalAlignment="Left" Margin="199,215,0,0" VerticalAlignment="Top" Height="42" Width="180" ToolTip="Makes the speech from the synthesizer stop" FontSize="18" Click="cancelSpeech" IsEnabled="False" Grid.Row="1"/>
-        <Button x:Name="pauseB" Content="Pause" HorizontalAlignment="Left" Margin="515,108,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Pauses speech" FontSize="18" Click="pause" IsEnabled="False" Grid.Row="1"/>
-        <Button x:Name="unpauseB" Content="Resume" HorizontalAlignment="Left" Margin="382,108,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Resumes speech" FontSize="18" Click="unpause" IsEnabled="False" Grid.Row="1">
+        <TextBlock HorizontalAlignment="Left" Margin="300,238,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="Voice volume" Grid.Row="3"/>
+        <Button x:Name="cancel" Content="Stop" HorizontalAlignment="Left" Margin="199,185,0,0" VerticalAlignment="Top" Height="42" Width="180" ToolTip="Makes the speech from the synthesizer stop" FontSize="18" Click="cancelSpeech" IsEnabled="False" Grid.Row="3"/>
+        <Button x:Name="pauseB" Content="Pause" HorizontalAlignment="Left" Margin="384,49,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Pauses speech" FontSize="18" Click="pause" IsEnabled="False" Grid.Row="3"/>
+        <Button x:Name="unpauseB" Content="Resume" HorizontalAlignment="Left" Margin="384,4,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Resumes speech" FontSize="18" Click="unpause" IsEnabled="False" Grid.Row="3">
         </Button>
-        <ProgressBar x:Name="progress" HorizontalAlignment="Left" Height="10" Margin="382,155,0,0" VerticalAlignment="Top" Width="261" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
-            <ProgressBar.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="0"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </ProgressBar.RenderTransform>
-        </ProgressBar>
-        <Button x:Name="defaultDevice" Content="Output to Default" HorizontalAlignment="Left" Margin="513,215,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Sets output to default audio device. This stops ongoing recordings" Click="DefaultDevice" ClickMode="Release" Grid.Row="1"/>
-        <Button x:Name="mode" Content="Non-SSML (Basic)" HorizontalAlignment="Left" Margin="513,170,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Enabling SSML will require you to format the text if it were SSML. SSML (Speech Synthesis Markup Language) is used for complex speech synthesis that requires fluctuating speech rates, volumes, etc. By default, the Non-SSML mode is enabled." Click="changeMode" ClickMode="Release" Grid.Row="1"/>
-        <Button x:Name="Voicechanger" Content="Male" HorizontalAlignment="Left" Margin="382,170,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Changes voice" FontSize="18" Click="changevoice" ClickMode="Release" Grid.Row="1"/>
-        <TextBlock x:Name="volumeText" HorizontalAlignment="Left" Margin="279,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="100" Width="121" Grid.Row="1"/>
-        <Slider x:Name="volumeSpeak" HorizontalAlignment="Left" Margin="10,330,0,0" VerticalAlignment="Top" Width="268" SmallChange="1" TickPlacement="BottomRight" Foreground="#FFBFBFBF" ToolTip="How fast the voice speaks (-10 to 10)" ValueChanged="volumeChange" AutoToolTipPlacement="BottomRight" Orientation="Horizontal" Maximum="100" Value="100" TickFrequency="5" Grid.Row="1"/>
-        <Button x:Name="save" Content="Record Speech" HorizontalAlignment="Left" Margin="382,215,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Records speech to a .wav file. with the name inputted. To cancel this, press Output to Default." Click="saveFileA" ClickMode="Release" Grid.Row="1"/>
-        <Grid x:Name="savefilegrid" Background="#66000000" Visibility="Hidden" Grid.RowSpan="3">
+        <Button x:Name="defaultDevice" Content="Output to Default" HorizontalAlignment="Left" Margin="384,140,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Sets output to default audio device. This stops ongoing recordings" Click="DefaultDevice" ClickMode="Release" Grid.Row="3"/>
+        <TextBlock x:Name="volumeText" HorizontalAlignment="Left" Margin="569,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="Black" Text="100" Width="121" Grid.Row="3"/>
+        <Slider x:Name="volumeSpeak" HorizontalAlignment="Left" Margin="300,254,0,0" VerticalAlignment="Top" Width="268" SmallChange="1" TickPlacement="BottomRight" Foreground="#FFBFBFBF" ToolTip="How fast the voice speaks (-10 to 10)" ValueChanged="volumeChange" AutoToolTipPlacement="BottomRight" Orientation="Horizontal" Maximum="100" Value="100" TickFrequency="5" Grid.Row="3"/>
+        <Button x:Name="save" Content="Record Speech" HorizontalAlignment="Left" Margin="384,94,0,0" VerticalAlignment="Top" Height="42" Width="128" ToolTip="Records speech to a .wav file. with the name inputted. To cancel this, press Output to Default." Click="saveFileA" ClickMode="Release" Grid.Row="3"/>
+        <Grid x:Name="savefilegrid" Background="#66000000" Visibility="Hidden" Grid.RowSpan="5">
             <Rectangle HorizontalAlignment="Center" Height="124" Stroke="Black" VerticalAlignment="Center" Width="428" Fill="DarkGray"/>
             <TextBlock HorizontalAlignment="Left" Margin="193,161,0,0" TextWrapping="Wrap" Text="Input the directory and name of the file (example: C:\Users\{username}\Downloads\test.wav) To stop recording to a file, press the Output to Default button." VerticalAlignment="Top" Foreground="Black" Width="421"/>
             <TextBox x:Name="name" HorizontalAlignment="Center" Height="20" TextWrapping="Wrap" Text="Input directory here." VerticalAlignment="Center" Width="320"/>
             <Button x:Name="confirmSave" Content="Save File" HorizontalAlignment="Left" Height="31" Margin="240,232,0,0" VerticalAlignment="Top" Width="113" Click="saveFileB"/>
             <Button x:Name="exitSave" Content="Close" HorizontalAlignment="Left" Height="31" Margin="358,232,0,0" VerticalAlignment="Top" Width="113" Click="exitSaveFile"/>
         </Grid>
-        <TextBlock x:Name="time" HorizontalAlignment="Left" Margin="194,0,0,-3" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="555" Foreground="Black" Height="21" Grid.Row="1" TextAlignment="Right" Grid.RowSpan="2"><Run Text="Ready"/><LineBreak/><Run/></TextBlock>
-        <TextBlock x:Name="warning_Copy" HorizontalAlignment="Left" Margin="384,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="330" Foreground="Black" Height="86" Grid.Row="1"><Run Text="SSML Guides:"/><Run/>
-            <LineBreak></LineBreak>
-            <Hyperlink NavigateUri="https://www.w3.org/TR/2004/REC-speech-synthesis-20040907/#S2" RequestNavigate="linkA">Official Documentation
-            </Hyperlink>
-            <LineBreak></LineBreak>
-            <Hyperlink NavigateUri="https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-synthesis-markup" RequestNavigate="linkA">Microsoft Azure Documentation
-            </Hyperlink>
-            <LineBreak></LineBreak>
-            <Hyperlink NavigateUri="https://cloud.google.com/text-to-speech/docs/ssml" RequestNavigate="linkA">Google Cloud Documentation
-            </Hyperlink>
-        </TextBlock>
+        <TextBlock x:Name="time" HorizontalAlignment="Left" Margin="194,0,0,-3" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="555" Foreground="Black" Height="21" Grid.Row="3" TextAlignment="Right" Grid.RowSpan="2"><Run Text="Ready"/><LineBreak/><Run/></TextBlock>
 
 
 
