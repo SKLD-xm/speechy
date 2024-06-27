@@ -1,6 +1,5 @@
 # speechy
-A text-to-speech synthesizer based on C#.
-Made by SKLD/pythonomial (Both accounts are one person, I kind of made a mistake with the two accounts so)
+A text-to-speech synthesizer based on C# developed by skld-xm.
 
 ### Current version: 1.4
 
