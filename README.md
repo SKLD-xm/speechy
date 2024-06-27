@@ -1,6 +1,8 @@
 # speechy
 A text-to-speech synthesizer based on C# developed by skld-xm.
 
+## Note: Speechy may be incorrectly flagged as malware by Norton.
+
 ### Current version: 1.4
 
 Press TAB to make indentations for paragraphs.
