@@ -36,4 +36,5 @@ Anything inside of the <speak></speak> brackets will be executed and spoken. If 
 https://www.w3.org/TR/2004/REC-speech-synthesis-20040907/
 
 Contact me on Discord at `@svhx`
+
 Speechy may be incorrectly flagged as malware by Norton. This appears to be a widespread issue with C# apps; no patch will be released until I get to developing version 1.5. Sorry for the inconvenience.
