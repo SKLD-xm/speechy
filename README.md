@@ -2,6 +2,7 @@
 A text-to-speech synthesizer based on C# developed by skld-xm.
 
 ## Note: Speechy may be incorrectly flagged as malware by Norton.
+I have no clue why it does this other than possibly because it accesses your Windows filesystem?
 
 ### Current version: 1.4
 
